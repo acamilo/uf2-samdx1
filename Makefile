@@ -1,7 +1,7 @@
 BOARD=zero
 -include Makefile.user
 include boards/$(BOARD)/board.mk
-CC=arm-none-eabi-gcc
+CC = /home/avcamilo/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc
 ifeq ($(CHIP_FAMILY), samd21)
 COMMON_FLAGS = -mthumb -mcpu=cortex-m0plus -Os -g -DSAMD21
 endif
@@ -139,6 +139,9 @@ qc \n\
 
 jlink-flash: $(BUILD_PATH)/$(NAME).bin $(BUILD_PATH)/flash.jlink
 	jlinkexe -if swd -device AT$(CHIP_VARIANT) -speed 4000 -CommanderScript $(BUILD_PATH)/flash.jlink
+
+stlink-v2-flash:
+	openocd -f flash-stlinkv2.cfg -c "program $(BUILD_PATH)/$(NAME).bin verify" -c "reset" -c "shutdown"
 
 wait:
 	sleep 5
